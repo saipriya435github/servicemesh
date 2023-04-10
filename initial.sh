@@ -3,18 +3,14 @@
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 #Add the docker repository
-sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-   
+DISTRO=$(lsb_release -c -s)
+echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $DISTRO stable" | sudo tee /etc/apt/sources.list.d/docker.list
+
 #Reload the apt sources list
 sudo apt-get update
 
 #Install docker community edition
-sudo apt-get install -y docker-ce=18.06.1~ce~3-0~ubuntu
-#sudo apt-get install -y docker-ce
-
+sudo apt-get install -y docker-ce
 
 #Prevent auto updates for docker package
 sudo apt-mark hold docker-ce
@@ -24,14 +20,14 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
 
 #Add the kubernetes repository
 cat << EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
-deb https://apt.kubernetes.io/ kubernetes-xenial main
+deb https://apt.kubernetes.io/ kubernetes-$DISTRO main
 EOF
 
 #Reload the apt sources list
 sudo apt-get update
 
 #Install packages
-sudo apt-get install -y kubelet=1.15.7-00 kubeadm=1.15.7-00 kubectl=1.15.7-00
+sudo apt-get install -y kubelet kubeadm kubectl
 
 #Prevent auto updates for kube package
 sudo apt-mark hold kubelet kubeadm kubectl
