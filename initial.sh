@@ -1,33 +1,22 @@
-# First Step Install on all the nodes
-# Add the docker repository key. GPG uses a method of encryption known as public key (asymmetric) cryptography, which provides a number of advantages and benefits. 
+#!/bin/bash
+
+# Update the package list and install required packages
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+# Add the Docker repository key and repository
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-#Add the docker repository
-DISTRO=$(lsb_release -c -s)
-echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $DISTRO stable" | sudo tee /etc/apt/sources.list.d/docker.list
-
-#Reload the apt sources list
-sudo apt-get update
-
-#Install docker community edition
-sudo apt-get install -y docker-ce
-
-#Prevent auto updates for docker package
-sudo apt-mark hold docker-ce
-
-#Add the kubernetes repository key.
+# Add the Kubernetes repository key and repository
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-#Add the kubernetes repository
-cat << EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
-deb https://apt.kubernetes.io/ kubernetes-$DISTRO main
-EOF
-
-#Reload the apt sources list
+# Update the package list again to get the new repositories
 sudo apt-get update
 
-#Install packages
-sudo apt-get install -y kubelet kubeadm kubectl
+# Install Docker and Kubernetes
+sudo apt-get install -y docker-ce=18.06.1~ce~3-0~ubuntu kubelet=1.15.7-00 kubeadm=1.15.7-00 kubectl=1.15.7-00
 
-#Prevent auto updates for kube package
-sudo apt-mark hold kubelet kubeadm kubectl
+# Prevent automatic updates for Docker and Kubernetes
+sudo apt-mark hold docker-ce kubelet kubeadm kubectl
