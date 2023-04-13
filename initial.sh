@@ -6,7 +6,10 @@ sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent sof
 
 # Add the Docker repository key and repository
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+# Remove the Docker repository key from the old trusted.gpg keyring
+sudo apt-key --keyring /etc/apt/trusted.gpg del 0EBFCD88
 
 # Add the Kubernetes repository key and repository
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -16,7 +19,5 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt
 sudo apt-get update
 
 # Install Docker and Kubernetes
-sudo apt-get install -y docker-ce=18.09.0~ce~3-0~ubuntu kubelet=1.15.7-00 kubeadm=1.15.7-00 kubectl=1.15.7-00
+sudo apt-get install -y docker-ce kubelet kubeadm kubectl
 
-# Prevent automatic updates for Docker and Kubernetes
-#sudo apt-mark hold docker-ce kubelet kubeadm kubectl
