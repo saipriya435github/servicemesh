@@ -16,4 +16,4 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt
 sudo apt-get update
 
 # Install Docker and Kubernetes
-sudo apt-get install -y docker-ce kubelet=1.15.7-00 kubeadm=1.15.7-00 kubectl=1.15.7-00
+sudo apt-get install -y docker-ce=18.09 kubelet=1.15.7-00 kubeadm=1.15.7-00 kubectl=1.15.7-00
